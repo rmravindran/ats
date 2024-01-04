@@ -16,3 +16,7 @@ func (result *OpResult[T]) Apply(values []T) *MaybeFrameOp[T] {
 func (result *OpResult[T]) Values() []T {
 	return result.values
 }
+
+func (result *OpResult[T]) Error() error {
+	return result.err
+}

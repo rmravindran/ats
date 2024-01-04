@@ -31,6 +31,10 @@ type Frame[T packer.Number] struct {
 	isDirty bool
 }
 
+//-----------------------------------------------------------------------------
+//- CONSTRUCTORS
+//-----------------------------------------------------------------------------
+
 // Create an empty frame that has the capacity to hold size float64 elements
 func NewEmptyFrame[T packer.Number](size uint64, p packer.Packer[T]) *Frame[T] {
 
@@ -79,34 +83,24 @@ func NewUnpackedFrame[T packer.Number](values []T, p packer.Packer[T]) *Frame[T]
 	return frame
 }
 
-// Return the value of the frame at the specified index.
-func (frame *Frame[T]) Value(index int) (T, error) {
-
-	if frame.state == Unknown {
-		return 0, errors.New("Uninitialized frame")
-	}
-
-	// Unpack first
-
-	frame.unpackIfNeeded()
-
-	return frame.values[index], nil
-}
+//-----------------------------------------------------------------------------
+//- MODIFIERS
+//-----------------------------------------------------------------------------
 
 // Set the element at the given index to the specified value.
 func (frame *Frame[T]) SetValue(index int, value T) error {
 
 	if frame.state == Unknown {
-		return errors.New("Uninitialized frame")
-	}
-
-	if frame.packer.NumElements() >= uint64(index) {
-		return errors.New("Index out of bound")
+		return errors.New("uninitialized frame")
 	}
 
 	// Unpack first
 
 	frame.unpackIfNeeded()
+
+	if index >= len(frame.values) {
+		return errors.New("index out of bound")
+	}
 
 	// Set value at index
 
@@ -150,6 +144,23 @@ func (frame *Frame[T]) Finalize(reduce bool) error {
 	}
 
 	return err
+}
+
+//-----------------------------------------------------------------------------
+//- ACCESSORS
+//-----------------------------------------------------------------------------
+
+// Return the value of the frame at the specified index.
+func (frame *Frame[T]) Value(index int) (T, error) {
+
+	if frame.state == Unknown {
+		return 0, errors.New("uninitialized frame")
+	}
+
+	// Unpack first
+	frame.unpackIfNeeded()
+
+	return frame.values[index], nil
 }
 
 // If the frame is dirty returns nil, otherwise returns the packed values

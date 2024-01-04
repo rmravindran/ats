@@ -2,6 +2,7 @@ package ops
 
 import (
 	"errors"
+
 	"github.com/rmravindran/ats/series/packer"
 )
 
@@ -16,8 +17,8 @@ type OpAdd1[T packer.Number] struct {
 // has been modified inplace. Otherwise, return false.
 func (op *OpAdd[T]) Apply(values []T) *MaybeFrameOp[T] {
 
-	if values == nil || len(values) == 0 {
-		return ErrorOp[T](errors.New("Addition on nil/empty array."))
+	if len(values) == 0 {
+		return ErrorOp[T](errors.New("OpAdd on nil/empty array"))
 	}
 
 	return JustOp[T](&OpAdd1[T]{a: values})
@@ -27,14 +28,14 @@ func (op *OpAdd[T]) Values() []T {
 	return nil
 }
 
-func Error() error {
+func (op *OpAdd[T]) Error() error {
 	return nil
 }
 
 func (op1 *OpAdd1[T]) Apply(values []T) *MaybeFrameOp[T] {
 
 	if len(op1.a) != len(values) {
-		return ErrorOp[T](errors.New("Invalid size for OpAdd"))
+		return ErrorOp[T](errors.New("invalid size for OpAdd arguments"))
 	}
 
 	var ret = &OpResult[T]{
@@ -49,5 +50,9 @@ func (op1 *OpAdd1[T]) Apply(values []T) *MaybeFrameOp[T] {
 }
 
 func (op *OpAdd1[T]) Values() []T {
+	return nil
+}
+
+func (op *OpAdd1[T]) Error() error {
 	return nil
 }

@@ -1,9 +1,10 @@
 package ops
 
 import (
+	"testing"
+
 	"github.com/rmravindran/ats/series/frame"
 	"github.com/rmravindran/ats/series/packer"
-	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -14,14 +15,14 @@ func TestFrame_EmptyFrame(t *testing.T) {
 	fA := frame.NewEmptyFrame[float64](10, pA)
 
 	for i := 0; i < 10; i++ {
-		fA.SetValue(uint64(i), float64(i))
+		fA.SetValue(i, float64(i))
 	}
 
 	pB := packer.NewChimp[float64]()
 	fB := frame.NewEmptyFrame[float64](10, pB)
 
 	for i := 0; i < 10; i++ {
-		fB.SetValue(uint64(i), float64(i))
+		fB.SetValue(i, float64(i))
 	}
 
 	var opAdd = JustOp[float64](&OpAdd[float64]{})

@@ -2,6 +2,7 @@ package series
 
 import (
 	"errors"
+
 	"github.com/rmravindran/ats/series/frame"
 	"github.com/rmravindran/ats/series/packer"
 )
@@ -49,56 +50,65 @@ func (series *Series[T]) AppendValue(time uint64, value T) error {
 		series.appendFrame()
 	}
 	frameIndex := series.size / series.frameSize
-	if frameIndex <= len(series.timeFrames) {
+	if frameIndex >= len(series.timeFrames) {
 		series.appendFrame()
 	}
 
 	errT := series.timeFrames[frameIndex].SetValue(series.lastFrameOffset, time)
-	errV := series.valueFrames[frameIndex].SetValue(series.lastFrameOffset, value)
+	if errT != nil {
+		return errT
+	}
 
-	if errT == nil && errV == nil {
-		return nil
+	errV := series.valueFrames[frameIndex].SetValue(series.lastFrameOffset, value)
+	if errV != nil {
+		return errV
 	}
 
 	series.lastFrameOffset++
 	series.size++
 
-	return errV
+	return nil
 }
 
 // Set value at the specified index
 func (series *Series[T]) SetValue(index int, time uint64, value T) error {
 	if index >= series.size {
-		return errors.New("Out of bound index")
+		return errors.New("index out of bound")
 	}
 
 	frameIndex := index / series.frameSize
 	localIndex := index - (frameIndex * series.frameSize)
 	errT := series.timeFrames[frameIndex].SetValue(localIndex, time)
-	errV := series.valueFrames[frameIndex].SetValue(localIndex, value)
-
-	if errT == nil && errV == nil {
-		return nil
+	if errT != nil {
+		return errT
 	}
-	return errV
+
+	errV := series.valueFrames[frameIndex].SetValue(localIndex, value)
+	if errV != nil {
+		return errV
+	}
+
+	return nil
 }
 
 // Set value at the specified index
 func (series *Series[T]) Value(index int) (uint64, T, error) {
 	if index >= series.size {
-		return 0, T(0), errors.New("Out of bound index")
+		return 0, T(0), errors.New("index out of bound")
 	}
 
 	frameIndex := index / series.frameSize
 	localIndex := index - (frameIndex * series.frameSize)
 	t, errT := series.timeFrames[frameIndex].Value(localIndex)
+	if errT != nil {
+		return 0, T(0), errT
+	}
 	v, errV := series.valueFrames[frameIndex].Value(localIndex)
-
-	if errT == nil && errV == nil {
-		return t, v, nil
+	if errT != nil {
+		return 0, T(0), errV
 	}
 
-	return 0, T(0), errors.New("Invalid value accessor")
+	return t, v, nil
 }
 
 func (series *Series[T]) Size() int {
@@ -108,6 +118,10 @@ func (series *Series[T]) Size() int {
 func (series *Series[T]) FrameSize() int {
 	return series.frameSize
 }
+
+//-----------------------------------------------------------------------------
+//                              PRIVATE METHODS
+//-----------------------------------------------------------------------------
 
 func (series *Series[T]) appendFrame() {
 	pT := packer.NewChimp[uint64]()

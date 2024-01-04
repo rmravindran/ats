@@ -67,7 +67,7 @@ func (chimp *Chimp[T]) Pack(src []T, dst *bytes.Buffer, op PackOp, opParam T) er
 		return chimp.packFloat(src, dst, op, opParam)
 	}
 
-	return errors.New("Unsupported type in Number.")
+	return errors.New("unsupported type in pack")
 }
 
 // Unpacks the float64 data in the src buffer to the dst slice and returns
@@ -83,7 +83,7 @@ func (chimp *Chimp[T]) Unpack(src *bytes.Buffer, dst []T, op PackOp, opParam T) 
 		return chimp.unpackFloat(src, dst, op, opParam)
 	}
 
-	return 0, errors.New("Unsupported type in Number.")
+	return 0, errors.New("unsupported type in unpack")
 }
 
 // Packs the float64 data in the src slice to the dst buffer and returns the buffer

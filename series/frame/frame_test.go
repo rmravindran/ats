@@ -1,8 +1,9 @@
 package frame
 
 import (
-	"github.com/rmravindran/ats/series/packer"
 	"testing"
+
+	"github.com/rmravindran/ats/series/packer"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -14,7 +15,8 @@ func TestFrame_EmptyFrame(t *testing.T) {
 	fA := NewEmptyFrame[float64](10, pA)
 
 	for i := 0; i < 10; i++ {
-		fA.SetValue(uint64(i), float64(i))
+		err := fA.SetValue(i, float64(i))
+		assert.Nil(t, err)
 	}
 
 	// Length of the frame should return the number of elements in the frame
