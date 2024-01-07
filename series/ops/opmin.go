@@ -10,31 +10,28 @@ import (
 // - OpAdd Struct
 // ----------------------------------------------------------------------------
 
-// Represents an operation that can be applied on a time series to generate
-// windowed sum of the values.
-type OpSum[S packer.Number, T packer.Number] struct {
-	initialValue T
-	windowSize   int
+// Return an operation that return the minimum value of a time series over
+// a specified window size.
+type OpMin[S packer.Number, T packer.Number] struct {
+	windowSize int
 }
 
 // --------------
 // - CONSTRUCTORS
 // --------------
 
-// Create a new OpSum operator with the specified initiatl size and windowSize.
-func NewOpSum[T packer.Number](initialValue T, windowSize int) *MaybeOp[T, T] {
-	return JustOp[T, T](&OpSum[T, T]{
-		initialValue: initialValue,
-		windowSize:   windowSize})
+// Create a new OpMin operator with the specified windowSize.
+func NewOpMin[T packer.Number](windowSize int) *MaybeOp[T, T] {
+	return JustOp[T, T](&OpMin[T, T]{windowSize: windowSize})
 }
 
 // ----------------
 // - PUBLIC METHODS
 // ----------------
 
-// Apply the OpSum operator on the specified args and return an operator that
-// contains the sum of the values over the specified windowSize.
-func (op *OpSum[S, T]) Apply(args Transformable[S, T]) *MaybeOp[S, T] {
+// Apply the OpMin operator on the specified args and return an operator that
+// contains the minimum value of the values over the specified windowSize.
+func (op *OpMin[S, T]) Apply(args Transformable[S, T]) *MaybeOp[S, T] {
 
 	if args == nil || args.IsEmpty() {
 		return ErrorOp[S, T](errors.New("invalid size for OpAdd arguments"))
@@ -53,16 +50,15 @@ func (op *OpSum[S, T]) Apply(args Transformable[S, T]) *MaybeOp[S, T] {
 
 	resNdx := 0
 	for idx := 0; idx < args.Length(); idx, resNdx = idx+op.windowSize, resNdx+1 {
-		sumV := args.ValueAt(idx)
-		if idx == 0 {
-			sumV += op.initialValue
-		}
+		minV := args.ValueAt(idx)
 		tStart := args.TimeAt(idx)
-
 		for jdx := 1; jdx < op.windowSize; jdx++ {
-			sumV += args.ValueAt(idx + jdx)
+			tmp := args.ValueAt(idx + jdx)
+			if tmp < minV {
+				minV = tmp
+			}
 		}
-		resV[resNdx] = T(sumV)
+		resV[resNdx] = T(minV)
 		resT[resNdx] = tStart
 	}
 
@@ -74,13 +70,13 @@ func (op *OpSum[S, T]) Apply(args Transformable[S, T]) *MaybeOp[S, T] {
 	return JustOp[S, T](ret)
 }
 
-// Returns a nil TxIdentity. Sum operation is the result of the Apply function.
+// Returns a nil TxIdentity. Min operation is the result of the Apply function.
 // The result is returned as an operator from the Apply invocation.
-func (op *OpSum[S, T]) Values() *TxIdentity[T, T] {
+func (op *OpMin[S, T]) Values() *TxIdentity[T, T] {
 	return &TxIdentity[T, T]{values: nil}
 }
 
-// Returns a nil error.
-func (op *OpSum[S, T]) Error() error {
+// Returns nil error.
+func (op *OpMin[S, T]) Error() error {
 	return nil
 }
