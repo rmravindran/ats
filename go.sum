@@ -1,5 +1,7 @@
 github.com/bearmini/bitstream-go v0.0.0-20190121230027-bec1c9ea0d3c h1:4RL7ENhXVDHqTk7vSgM7zUNHdYW7LfWUIBH2WZ/FZLc=
 github.com/bearmini/bitstream-go v0.0.0-20190121230027-bec1c9ea0d3c/go.mod h1:keOh1QpnRe0nCHGjev5R37jMl0zlLP+3ktETWfa4eik=
+github.com/caio/go-tdigest/v4 v4.0.1 h1:sx4ZxjmIEcLROUPs2j1BGe2WhOtHD6VSe6NNbBdKYh4=
+github.com/caio/go-tdigest/v4 v4.0.1/go.mod h1:Wsa+f0EZnV2gShdj1adgl0tQSoXRxtM0QioTgukFw8U=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
