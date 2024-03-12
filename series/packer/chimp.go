@@ -98,6 +98,20 @@ func (chimp *Chimp[T]) Unpack(src *bytes.Buffer, dst []T, op PackOp, opParam T) 
 	return 0, errors.New("unsupported type in unpack")
 }
 
+// Return the size of the packed data
+func (chimp *Chimp[T]) PackedSize() uint64 {
+	return (chimp.size + 7) / 8
+}
+
+// Reutrn the umber of elements in the frame
+func (chimp *Chimp[T]) NumElements() uint64 {
+	return chimp.numElements
+}
+
+//-----------------------------------------------------------------------------
+//                              PRIVATE METHODS
+//-----------------------------------------------------------------------------
+
 // Packs the float64 data in the src slice to the dst buffer and returns the buffer
 // Otherwise, returns (nil, error).
 func (chimp *Chimp[T]) packFloat(
@@ -360,20 +374,6 @@ func (chimp *Chimp[T]) unpackUInt(
 
 	return readElements, nil
 }
-
-// Return the size of the packed data
-func (chimp *Chimp[T]) PackedSize() uint64 {
-	return (chimp.size + 7) / 8
-}
-
-// Reutrn the umber of elements in the frame
-func (chimp *Chimp[T]) NumElements() uint64 {
-	return chimp.numElements
-}
-
-//-----------------------------------------------------------------------------
-//                              PRIVATE METHODS
-//-----------------------------------------------------------------------------
 
 func (chimp *Chimp[T]) addUIntValue(bitStream *bitstream.BitWriter, value uint64) {
 	if chimp.first {

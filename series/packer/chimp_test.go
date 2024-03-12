@@ -157,8 +157,8 @@ func TestChimp_Float64_CompressionCheckForPingPongSequence(t *testing.T) {
 	assert.Equal(t, uint64(271), chimp.size) // Num bits
 }
 
-// Tests the memory impact of storing 1 million random values.
-func TestChimp_Float64_CompressionCheckForRandomLargeValues(t *testing.T) {
+// Tests the memory impact of storing 1 million large value sequence.
+func TestChimp_Float64_CompressionCheckForLargeValueSequence(t *testing.T) {
 
 	a := make([]float64, 1000000)
 	for i := range a {
@@ -169,14 +169,14 @@ func TestChimp_Float64_CompressionCheckForRandomLargeValues(t *testing.T) {
 	buffer := &bytes.Buffer{}
 
 	chimp.Pack(a, buffer, NOP, 0.0)
-	var threshold int = 2400000
+	var threshold int = 2200000
 	assert.LessOrEqual(t, buffer.Len(), threshold) // Num bytes
 }
 
 // Benchmark testing for packing. A single iteration will pack 1 million
-// constand float64 (1999.9999). So a single op in the "ns/op" refers to
+// constant float64 (1999.9999). So a single op in the "ns/op" refers to
 // handling 1 million float64s
-func BenchmarkFor_Float64_PackingConst(t *testing.B) {
+func BenchmarkChimpFor_Float64_PackingConst(t *testing.B) {
 
 	a := make([]float64, 1000000)
 	for i := range a {
@@ -195,9 +195,9 @@ func BenchmarkFor_Float64_PackingConst(t *testing.B) {
 }
 
 // Benchmark testing for unpacking. A single iteration will pack 1 million
-// constand float64 (1999.9999). So a single op in the "ns/op" refers to
+// constant float64 (1999.9999). So a single op in the "ns/op" refers to
 // handling 1 million float64s
-func BenchmarkFor_Float64_UnpackingConst(t *testing.B) {
+func BenchmarkChimpFor_Float64_UnpackingConst(t *testing.B) {
 
 	a := make([]float64, 1000000)
 	res := make([]float64, 1000000)
@@ -220,7 +220,7 @@ func BenchmarkFor_Float64_UnpackingConst(t *testing.B) {
 // Benchmark testing for packing. A single iteration will pack 1 million
 // floats that are monotonically increasing by 1.0. So a single op in the
 // "ns/op" refers to handling 1 million float64s
-func BenchmarkFor_Float64_PackingSequence(t *testing.B) {
+func BenchmarkChimpFor_Float64_PackingSequence(t *testing.B) {
 
 	a := make([]float64, 1000000)
 	for i := range a {
@@ -241,7 +241,7 @@ func BenchmarkFor_Float64_PackingSequence(t *testing.B) {
 // Benchmark testing for unpacking. A single iteration will unpack 1 million
 // floats that are monotonically increasing by 1.0. So a single op in the
 // "ns/op" refers to handling 1 million float64s
-func BenchmarkFor_Float64_UnpackingSequence(t *testing.B) {
+func BenchmarkChimpFor_Float64_UnpackingSequence(t *testing.B) {
 
 	a := make([]float64, 1000000)
 	res := make([]float64, 1000000)
@@ -411,8 +411,8 @@ func TestChimp_Int64_CompressionCheckForPingPongSequence(t *testing.T) {
 	assert.Equal(t, uint64(245), chimp.size) // Num bits
 }
 
-// Tests the memory impact of storing 1 million random values.
-func TestChimp_Int64_CompressionCheckForRandomLargeValues(t *testing.T) {
+// Tests the memory impact of storing 1 million large value sequence.
+func TestChimp_Int64_CompressionCheckForLargeValueSequence(t *testing.T) {
 
 	a := make([]int64, 1000000)
 	for i := range a {
@@ -428,9 +428,9 @@ func TestChimp_Int64_CompressionCheckForRandomLargeValues(t *testing.T) {
 }
 
 // Benchmark testing for packing. A single iteration will pack 1 million
-// constand int64 (1999). So a single op in the "ns/op" refers to
+// constant int64 (1999). So a single op in the "ns/op" refers to
 // handling 1 million int64s
-func BenchmarkFor_Int64_PackingConst(t *testing.B) {
+func BenchmarkChimpFor_Int64_PackingConst(t *testing.B) {
 
 	a := make([]int64, 1000000)
 	for i := range a {
@@ -449,9 +449,9 @@ func BenchmarkFor_Int64_PackingConst(t *testing.B) {
 }
 
 // Benchmark testing for unpacking. A single iteration will pack 1 million
-// constand int64 (1999). So a single op in the "ns/op" refers to
+// constant int64 (1999). So a single op in the "ns/op" refers to
 // handling 1 million int64s
-func BenchmarkFor_Int64_UnpackingConst(t *testing.B) {
+func BenchmarkChimpFor_Int64_UnpackingConst(t *testing.B) {
 
 	a := make([]int64, 1000000)
 	res := make([]int64, 1000000)
@@ -474,7 +474,7 @@ func BenchmarkFor_Int64_UnpackingConst(t *testing.B) {
 // Benchmark testing for packing. A single iteration will pack 1 million
 // int64s that are monotonically increasing by 1.0. So a single op in the
 // "ns/op" refers to handling 1 million int64s
-func BenchmarkFor_Int64_PackingSequence(t *testing.B) {
+func BenchmarkChimpFor_Int64_PackingSequence(t *testing.B) {
 
 	a := make([]int64, 1000000)
 	for i := range a {
@@ -495,7 +495,7 @@ func BenchmarkFor_Int64_PackingSequence(t *testing.B) {
 // Benchmark testing for unpacking. A single iteration will unpack 1 million
 // int64s that are monotonically increasing by 1.0. So a single op in the
 // "ns/op" refers to handling 1 million int64s
-func BenchmarkFor_Int64_UnpackingSequence(t *testing.B) {
+func BenchmarkChimpFor_Int64_UnpackingSequence(t *testing.B) {
 
 	a := make([]int64, 1000000)
 	res := make([]int64, 1000000)
@@ -665,8 +665,8 @@ func TestChimp_UInt64_CompressionCheckForPingPongSequence(t *testing.T) {
 	assert.Equal(t, uint64(235), chimp.size) // Num bits
 }
 
-// Tests the memory impact of storing 1 million random values.
-func TestChimp_UInt64_CompressionCheckForRandomLargeValues(t *testing.T) {
+// Tests the memory impact of storing 1 million large value sequence.
+func TestChimp_UInt64_CompressionCheckForLargeValueSequence(t *testing.T) {
 
 	a := make([]uint64, 1000000)
 	for i := range a {
@@ -682,9 +682,9 @@ func TestChimp_UInt64_CompressionCheckForRandomLargeValues(t *testing.T) {
 }
 
 // Benchmark testing for packing. A single iteration will pack 1 million
-// constand uint64 (1999). So a single op in the "ns/op" refers to
+// constant uint64 (1999). So a single op in the "ns/op" refers to
 // handling 1 million uint64s
-func BenchmarkFor_UInt64_PackingConst(t *testing.B) {
+func BenchmarkChimpFor_UInt64_PackingConst(t *testing.B) {
 
 	a := make([]uint64, 1000000)
 	for i := range a {
@@ -703,9 +703,9 @@ func BenchmarkFor_UInt64_PackingConst(t *testing.B) {
 }
 
 // Benchmark testing for unpacking. A single iteration will pack 1 million
-// constand uint64 (1999). So a single op in the "ns/op" refers to
+// constant uint64 (1999). So a single op in the "ns/op" refers to
 // handling 1 million uint64s
-func BenchmarkFor_UInt64_UnpackingConst(t *testing.B) {
+func BenchmarkChimpFor_UInt64_UnpackingConst(t *testing.B) {
 
 	a := make([]uint64, 1000000)
 	res := make([]uint64, 1000000)
@@ -728,7 +728,7 @@ func BenchmarkFor_UInt64_UnpackingConst(t *testing.B) {
 // Benchmark testing for packing. A single iteration will pack 1 million
 // uint64s that are monotonically increasing by 1.0. So a single op in the
 // "ns/op" refers to handling 1 million uint64s
-func BenchmarkFor_UInt64_PackingSequence(t *testing.B) {
+func BenchmarkChimpFor_UInt64_PackingSequence(t *testing.B) {
 
 	a := make([]uint64, 1000000)
 	for i := range a {
@@ -749,7 +749,7 @@ func BenchmarkFor_UInt64_PackingSequence(t *testing.B) {
 // Benchmark testing for unpacking. A single iteration will unpack 1 million
 // uint64s that are monotonically increasing by 1.0. So a single op in the
 // "ns/op" refers to handling 1 million uint64s
-func BenchmarkFor_Unt64_UnpackingSequence(t *testing.B) {
+func BenchmarkChimpFor_Unt64_UnpackingSequence(t *testing.B) {
 
 	a := make([]uint64, 1000000)
 	res := make([]uint64, 1000000)
@@ -767,4 +767,20 @@ func BenchmarkFor_Unt64_UnpackingSequence(t *testing.B) {
 		chimp.Unpack(buffer, res, NOP, 0.0)
 		t.StopTimer()
 	}
+}
+
+func BenchmarkChimpFor_StockPrice(t *testing.B) {
+
+	prices := ReadStockPriceFile()
+	if prices == nil {
+		assert.FailNow(t, "Failed to read stock price data")
+	}
+
+	chimp := NewChimp[float64]()
+	buffer := &bytes.Buffer{}
+	buffer.Grow(50000000)
+	t.StartTimer()
+	chimp.Pack(prices, buffer, NOP, 0.0)
+	t.StopTimer()
+	println("Num bytes: ", buffer.Len())
 }

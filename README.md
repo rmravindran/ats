@@ -15,4 +15,7 @@ The library is dedicated to optimizing in-memory time series operations for exce
 
 Coming from a C++ low-latency financial world, I have noticed that Go-land seriously lack a rich set of optimal time series function implementations. I've been on the hunt for these myself while developing other related products in Go. Typically, most time series databases (TSDBs) within the Go landscape only offer basic aggregation functions, leaving a gap in addressing the distinct requirements of streaming and block time series operations, which significantly differ from traditional OLAP functions. Creating optimal implementations of these functionalities in Go has the potential to enhance a multitude of systems, including existing TSDBs, built within this language's framework.
 
+## Testing the Compaction
 
+1. Extract the compressed files in data/ to /tmp/
+2. Run the appropriate Benchmark tests
