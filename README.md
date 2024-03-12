@@ -1,6 +1,6 @@
 # Adaptive Time Series
 
-Test <img src='/wip.png', width='32'/> The library is in early development state. **If you have experience writing ts/statistical functions using hardware vector instructions, feel free to reach out**
+<img src='https://github.com/rmravindran/ats/blob/main/wip.png' width='64'/> The library is in early development state. **If you have experience writing ts/statistical functions using hardware vector instructions, feel free to reach out**
 
 ## Experimental Adaptive Time Series Library (Work in Progress)
 
