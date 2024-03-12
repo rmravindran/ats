@@ -1,5 +1,10 @@
 package packer
 
+// The core compaction logic is based ont the VLDB 2015 paper "Gorilla: A Fast,
+// Scalable, In-Memory Time Series Database" by Teller, et al.
+
+// Paper Link: http://www.vldb.org/pvldb/vol8/p1816-teller.pdf
+
 import (
 	"bytes"
 	"errors"
