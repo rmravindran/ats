@@ -1,2 +1,2 @@
 # ats
-Adaptive Time Series
+Adaptive Time Series (Experimental - WIP)
