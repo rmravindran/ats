@@ -1,5 +1,17 @@
 package packer
 
+// The core compaction logic is based on the VLDB 2022 paper about the Chimp
+// compression algo. This specific implementation looks at the streaming variant
+// presentedin the paper.
+//
+// Our implementation allows both Offet and Delta pre-compact operations
+// in the pack and unpack methods.
+//
+// Ref: Panagiotis Liakos, Katia Papakonstantinopoulou, and Yannis Kotidis.
+//      Chimp: Efficient Lossless Floating Point Compression for Time Series
+//      Databases. PVLDB, 15(11): 3058 - 3070, 2022
+// Paper Link: https://www.vldb.org/pvldb/vol15/p3058-liakos.pdf
+
 import (
 	"bytes"
 	"errors"
